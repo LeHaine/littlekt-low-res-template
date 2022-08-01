@@ -10,10 +10,13 @@ import com.lehaine.littlekt.graph.node.component.HAlign
 import com.lehaine.littlekt.graph.node.component.VAlign
 import com.lehaine.littlekt.graph.node.node
 import com.lehaine.littlekt.graph.node.ui.Control
+import com.lehaine.littlekt.graph.node.ui.centerContainer
 import com.lehaine.littlekt.graph.node.ui.control
 import com.lehaine.littlekt.graph.node.ui.label
+import com.lehaine.littlekt.graph.node.viewport
 import com.lehaine.littlekt.input.Key
 import com.lehaine.littlekt.util.viewport.ExtendViewport
+import com.lehaine.littlekt.util.viewport.FitViewport
 import com.lehaine.rune.engine.RuneScene
 import com.lehaine.rune.engine.node.EntityCamera2D
 import com.lehaine.rune.engine.node.entityCamera2D
@@ -43,6 +46,9 @@ class GameScene(context: Context) :
             val entityCamera: EntityCamera2D
 
             val fbo = pixelSmoothFrameBuffer {
+                maxWidth = Config.VIRTUAL_WIDTH
+                maxHeight = Config.VIRTUAL_HEIGHT
+                targetHeight = Config.VIRTUAL_HEIGHT
                 entityCamera = entityCamera2D {
                     // TODO set viewbounds
                     camera = canvasCamera
@@ -97,25 +103,31 @@ class GameScene(context: Context) :
                     scaledDistY = entityCamera.scaledDistY
                 }
             }
-
         }
 
-        ui = control {
-            name = "UI"
-            anchorRight = 1f
-            anchorBottom = 1f
-
-            label {
-                text = "TODO: Implement game logic"
-                font = Assets.pixelFont
+        viewport {
+            viewport = FitViewport(Config.VIRTUAL_WIDTH, Config.VIRTUAL_HEIGHT).apply {
+                apply(this@GameScene.context, true)
+            }
+            ui = control {
+                name = "UI"
                 anchorRight = 1f
                 anchorBottom = 1f
-                verticalAlign = VAlign.CENTER
-                horizontalAlign = HAlign.CENTER
+
+                centerContainer {
+                    anchorRight = 1f
+                    anchorBottom = 1f
+                    label {
+                        text = "TODO:\nCreate Game"
+                        font = Assets.pixelFont
+                        horizontalAlign = HAlign.CENTER
+                    }
+                }
             }
         }
         fx.createParticleBatchNodes()
     }
+
     override fun update(dt: Duration) {
         fx.update(dt)
         super.update(dt)
@@ -126,11 +138,11 @@ class GameScene(context: Context) :
             resize(graphics.width, graphics.height)
         }
 
-        if(input.isKeyJustPressed(Key.T)) {
+        if (input.isKeyJustPressed(Key.T)) {
             println(root.treeString())
         }
 
-        if(input.isKeyJustPressed(Key.P)) {
+        if (input.isKeyJustPressed(Key.P)) {
             println(stats)
         }
     }

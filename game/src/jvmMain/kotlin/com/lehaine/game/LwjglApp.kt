@@ -5,10 +5,10 @@ import com.lehaine.littlekt.graphics.Color
 
 fun main() {
     createLittleKtApp {
-        width = 960
-        height = 540
+        width = 640
+        height = 640
         backgroundColor = Color.DARK_GRAY
-        title = "LittleKt Game Template"
+        title = "LittleKt Low Res Game Template"
     }.start {
         GameCore(it)
     }
